@@ -29,12 +29,8 @@ RailsAdmin.config do |config|
   # Number of default rows per-page:
   # config.default_items_per_page = 20
 
-  #  ==> Included models
-  # Add all excluded models here:
-  # config.excluded_models = []
-
-  # Add models here if you want to go 'whitelist mode':
-  # config.included_models = []
+  config.included_models = %w[Train Ticket Customer Route Schedule ScheduleStop Stop Feedback]
+  #config.excluded_models = %w[ScheduleStop]
 
   # Application wide tried label methods for models' instances
   # config.label_methods << :description # Default is [:name, :title]
@@ -78,5 +74,116 @@ RailsAdmin.config do |config|
   # Your model's configuration, to help you get started:
 
   # All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible. (visible(true))
+
+  config.model Customer do
+    create do
+      include_all_fields
+      exclude_fields :tickets, :feedbacks, :app_key
+    end
+    update do
+      exclude_fields :tickets, :feedbacks
+      field :app_key do
+        read_only true
+      end
+    end
+  end
+
+  config.model Route do
+    edit do
+      include_all_fields
+      exclude_fields :schedules, :schedule_stops
+    end
+  end
+
+  config.model Schedule do
+    object_label_method do
+      :schedule_object_label
+    end
+    edit do
+      include_all_fields
+      exclude_fields :tickets
+    end
+  end
+
+  config.model Train do
+    object_label_method do
+      :train_object_label
+    end
+    edit do
+      include_all_fields
+      exclude_fields :schedules
+    end
+  end
+
+  config.model ScheduleStop do
+    visible false
+    object_label_method do
+      :stop_object_label
+    end
+  end
+
+  config.model Ticket do
+    object_label_method do
+      :ticket_object_label
+    end
+    create do
+      include_all_fields
+      exclude_fields :number, :status, :amount
+    end
+    update do
+      include_all_fields
+      field :number do
+        read_only true
+      end
+      field :amount do
+        read_only true
+      end
+      field :schedule do
+        read_only true
+      end
+      field :customer do
+        read_only true
+      end
+    end
+  end
+
+  config.model Feedback do
+    object_label_method do
+      :feedback_object_label
+    end
+    create do
+      include_all_fields
+      exclude_fields :status, :feedback_id
+    end
+    update do
+      include_all_fields
+      field :feedback_id do
+        read_only true
+      end
+      field :customer do
+        read_only true
+      end
+    end
+  end
+
+  def feedback_object_label
+    "#{self.status}: #{self.created_at}" unless self.nil?
+  end
+
+  def schedule_object_label
+    "#{self.departs_at.strftime("%I:%M%P")} #{self.route.name}" unless self.route.nil?
+  end
+
+  def stop_object_label
+    "#{self.arrives_at.strftime("%I:%M%P")}" unless self.stop.nil?
+  end
+
+  def train_object_label
+    self.number unless self.nil?
+  end
+
+  def ticket_object_label
+    self.number unless self.nil?
+  end
 
 end
