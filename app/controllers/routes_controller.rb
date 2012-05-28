@@ -5,7 +5,7 @@ class RoutesController < ApplicationController
     @routes.each do |route|
       route.schedules.each do |schedule|
         schedule.schedule_stops.each do |stop|
-          stop['name'] = stop.stop.name
+          stop['name'] = stop.stop.name unless stop.stop.nil?
         end
         schedule['train'] = schedule.train
         schedule['stops'] = schedule.schedule_stops

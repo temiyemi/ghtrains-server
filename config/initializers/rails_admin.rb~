@@ -123,7 +123,7 @@ RailsAdmin.config do |config|
   end
 
   config.model Ticket do
-    #filters [:status]
+    filters [:status]
     object_label_method do
       :ticket_object_label
     end

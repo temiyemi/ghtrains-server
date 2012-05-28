@@ -5,19 +5,14 @@ class RoutesController < ApplicationController
     @routes.each do |route|
       route.schedules.each do |schedule|
         schedule.schedule_stops.each do |stop|
-          stop['name'] = stop.stop.name
+          stop['name'] = stop.name
         end
         schedule['train'] = schedule.train
         schedule['stops'] = schedule.schedule_stops
       end unless route.schedules.nil?
       route['scheduled_trips'] = route.schedules
     end
-    #render json: @routes.to_json
-    render js: "var data = #{@routes.to_json};"
+    render js: "#{params[:callback]}(#{@routes.to_json});"
   end
 
-  def show
-    @route = Route.find(params[:id])
-    render json: @route.schedules
-  end
 end
