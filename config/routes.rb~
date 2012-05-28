@@ -14,9 +14,9 @@ Ghtrains::Application.routes.draw do
     match "feedbacks/new",        to: "feedbacks#create"
     match "feedbacks/:app_key",        to: "feedbacks#index"
 
-    match "tickets/delete/:id",      to: "tickets#destroy"
-    match "tickets/edit/:id",      to: "tickets#update"
-    match "tickets/new",          to: "tickets#create"
+    match "tickets/:app_key/:id",      to: "tickets#destroy",  via: :delete
+    match "tickets/:app_key/:id",      to: "tickets#update",   via: :post
+    match "tickets/:app_key",          to: "tickets#create",   via: :post
     match "tickets/:app_key",          to: "tickets#index"
 	
 	match "/", to: "index#index"

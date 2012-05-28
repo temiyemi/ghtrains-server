@@ -5,14 +5,12 @@ class FeedbacksController < ApplicationController
   end
 
   def index
-    @feedback = @customer.feedbacks unless @customer.nil?
-    render json: @feedback
+    render js: "#{params[:callback]}(#{@customer.feedbacks.to_json});"
   end
 
   def create
-    @feedback = @customer.feedbacks.create(params[:feedback])
-    # @feedback.save
-    render json: @feedback
+    @customer.feedbacks.create(params[:feedback])
+    render js: "#{params[:callback]}(#{@customer.feedbacks.to_json});"
   end
 
 end

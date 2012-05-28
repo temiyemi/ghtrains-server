@@ -10,20 +10,17 @@ class TicketsController < ApplicationController
 
   def create
     @customer.tickets.create(params[:ticket])
-    get_all
     #render js: "#{params[:callback]}(#{@customer.tickets.to_json});"
   end
 
   def update
     @ticket = Ticket.find(params[:id])
     @ticket.update_attributes(status: params[:status])
-    get_all
     #render js: "#{params[:callback]}(#{@customer.tickets.to_json});"
   end
 
   def destroy
     Ticket.find(params[:id]).destroy
-    get_all
     #render js: "#{params[:callback]}(#{@customer.tickets.to_json});"
   end
 

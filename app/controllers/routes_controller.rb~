@@ -12,7 +12,12 @@ class RoutesController < ApplicationController
       end unless route.schedules.nil?
       route['scheduled_trips'] = route.schedules
     end
-    render js: "#{params[:callback]}(#{@routes.to_json});"
+    #render json: @routes.to_json
+    render js: "var data = #{@routes.to_json};"
   end
 
+  def show
+    @route = Route.find(params[:id])
+    render json: @route.schedules
+  end
 end
