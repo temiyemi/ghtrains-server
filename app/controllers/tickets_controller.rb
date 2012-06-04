@@ -4,6 +4,8 @@ class TicketsController < ApplicationController
     @customer = Customer.find_by_app_key(params[:app_key])
   end
 
+  before_filter :make_payment, only: :create
+
   def index
     get_all
   end
@@ -36,6 +38,14 @@ class TicketsController < ApplicationController
       ticket['train'] = ticket.schedule.train
     end
     render js: "#{params[:callback]}(#{@tickets.to_json});"
+  end
+
+
+  def make_payment
+    @status = PaymentAPI.process(params[:billing_account])
+    unless @status.key(0)
+      render js: "#{params[:callback]}(#{@status.to_json});" and return
+    end
   end
 
 end

@@ -4,6 +4,7 @@ gem 'rails', '3.2.2'
 gem 'sqlite3'
 gem 'devise', '2.0.4'
 gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
+gem 'monster_mash'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
