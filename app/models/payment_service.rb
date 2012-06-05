@@ -1,16 +1,11 @@
-require "monster_mash/base"
+class PaymentService
+  include HTTParty
+  base_uri 'http://localhost:4567'
 
-class PaymentAPI < MonsterMash::Base
-
-  defaults do
-    base_uri 'http://localhost:4567'
+  def process(params)
+    params[:amount] = 1
+    options = { :body => params }
+    response = self.class.post('/api/process.json', options)
+    JSON.parse(response.body)
   end
-
-  get(:process) do |params|
-    uri "/api/process/#{params[:mobile]}/#{params[:pin]}/1"
-    handler do |response|
-      JSON.parse(response.body)
-    end
-  end
-
 end
